@@ -12,6 +12,7 @@ const Dashboard = () => {
   const [users, setUsers] = useState([]);
   const [newTask, setNewTask] = useState({ title: '', description: '', assignedTo: '' });
   const navigate = useNavigate();
+  
 
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
@@ -25,14 +26,14 @@ const Dashboard = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/tasks', config);
+      const res = await axios.get('https://task-app-back-end.vercel.app/api/tasks', config);
       setTasks(res.data);
     } catch (err) { console.error(err); }
   };
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/auth/users', config);
+      const res = await axios.get('https://task-app-back-end.vercel.app/api/auth/users', config);
       setUsers(res.data);
     } catch (err) { console.error(err); }
   };
@@ -40,7 +41,7 @@ const Dashboard = () => {
   const handleCreateTask = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/tasks', newTask, config);
+      await axios.post('https://task-app-back-end.vercel.app/api/tasks', newTask, config);
       toast.success('Task Assigned!');
       fetchTasks();
       setNewTask({ title: '', description: '', assignedTo: '' });
@@ -49,7 +50,7 @@ const Dashboard = () => {
 
   const handleComplete = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/tasks/${id}`, {}, config);
+      await axios.put(`https://task-app-back-end.vercel.app/api/tasks/${id}`, {}, config);
       toast.success('Great Job! Task Completed.');
       fetchTasks();
     } catch (err) { toast.error('Error'); }
@@ -58,7 +59,7 @@ const Dashboard = () => {
   const handleDelete = async (id) => {
     if(!window.confirm("Delete this task?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${id}`, config);
+      await axios.delete(`https://task-app-back-end.vercel.app/api/tasks/${id}`, config);
       toast.info('Task Removed');
       fetchTasks();
     } catch (err) { toast.error('Error'); }
@@ -104,7 +105,7 @@ const Dashboard = () => {
                 <option value="">Select Developer</option>
                 {users.map(u => <option key={u._id} value={u._id}>{u.name}</option>)}
               </select>
-              <button type="submit" className="w-3xs bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-all transform active:scale-95">
+              <button type="submit" className="w-32 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-all transform active:scale-95">
                 Assign
               </button>
             </form>
@@ -117,7 +118,7 @@ const Dashboard = () => {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence>
+          <AnimatePresence mood="popLayout">
             {tasks.map(task => (
               <TaskCard 
                 key={task._id} 
